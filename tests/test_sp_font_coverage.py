@@ -13,7 +13,7 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GEN = os.path.join(ROOT, "tools", "starpet", "gen_fonts.py")
 FONT_DIR = os.path.join(ROOT, "main", "assets", "fonts")
-BUDGET_SRC = 900_000
+BUDGET_SRC = 1_100_000  # 方案 B 文案扩充后放宽（flash 余量充足）
 
 
 def fail(msg):

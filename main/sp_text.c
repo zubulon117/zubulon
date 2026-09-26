@@ -45,6 +45,7 @@ static const char *const s_activities[SP_ACTIVITY_COUNT] = {
     "表白", "加班", "出行", "购物", "聚会", "运动",
     "学习", "理财", "沟通", "休息", "整理", "早睡",
     "约会", "投资", "旅行", "烹饪", "唱歌", "发呆",
+    "看电影", "跑步", "写邮件", "复盘", "午睡", "聊天",
 };
 
 static const char *const s_items[SP_ITEM_COUNT] = {
@@ -62,6 +63,49 @@ static const char *const s_wishes[SP_WISH_COUNT] = {
     "小小的一步，也是星图里崭新的一笔。",
     "愿你今天遇到的风，都是温柔的。",
     "星星睡了，你的努力还亮着，睡前再夸自己一次。",
+    "别怕慢，星光会替你照亮前方的路。",
+    "今天也要加油呀，好运正在路上。",
+    "把烦恼折成纸飞机，让它飞进夜空里。",
+    "愿你的笑容比星星更亮，好运自然来。",
+};
+
+// 当日主题标题（24 种，原创文案，不与任何网站重复）。
+static const char *const s_themes[SP_THEME_COUNT] = {
+    "星轨交汇", "灵感涌动", "顺势而为", "静待花开",
+    "心有灵犀", "稳中求进", "柳暗花明", "守得云开",
+    "拨云见日", "厚积薄发", "水到渠成", "柳暗花明",
+    "乘风破浪", "水到渠成", "静水流深", "星光不问",
+    "静待花开", "顺势而为", "心有灵犀", "拨云见日",
+    "守得云开", "水到渠成", "静水流深", "星轨交汇",
+};
+
+// 五维短评（每维 3 句，qid 0..2 对应星级 1-2/3/4-5）。
+static const char *const s_quotes[SP_DIM_COUNT][SP_DIM_QUOTE_COUNT] = {
+    { // 综合
+        "星光似乎被云层遮住了，不妨放慢脚步，先照顾好自己。",
+        "运势平稳，按部就班就好，不必给自己太大压力。",
+        "运势在线，今天做什么都顺手，把握机会大胆行动。",
+    },
+    { // 爱情
+        "感情方面需要多一些耐心，给彼此一些空间会更好。",
+        "感情平淡中带着温馨，陪伴是最长情的告白。",
+        "爱情运势高涨，主动出击会有意想不到的收获。",
+    },
+    { // 事业
+        "工作可能会遇到一些小波折，保持冷静就能顺利解决。",
+        "事业稳步推进，做好手头的事，未来会有好结果。",
+        "事业运势极佳，适合提出新想法，会得到支持。",
+    },
+    { // 财运
+        "财运一般，避免大额消费，守住钱包更重要。",
+        "财运平稳，正常开销即可，不必过分担忧。",
+        "财运亨通，可能会有意外收获，可以适当奖励自己。",
+    },
+    { // 健康
+        "注意休息，避免熬夜，身体是革命的本钱。",
+        "健康状态尚可，适当运动有助于放松身心。",
+        "精力充沛，健康状况良好，适合户外锻炼。",
+    },
 };
 
 const sp_sign_text_t *sp_sign_text(uint8_t sign)
@@ -107,4 +151,16 @@ const char *sp_item_name(uint8_t id)
 const char *sp_wish_text(uint8_t id)
 {
     return id < SP_WISH_COUNT ? s_wishes[id] : s_wishes[0];
+}
+
+const char *sp_theme_title(uint8_t id)
+{
+    return id < SP_THEME_COUNT ? s_themes[id] : s_themes[0];
+}
+
+const char *sp_dim_quote(uint8_t dim, uint8_t qid)
+{
+    if (dim >= SP_DIM_COUNT) dim = 0;
+    if (qid >= SP_DIM_QUOTE_COUNT) qid = 0;
+    return s_quotes[dim][qid];
 }

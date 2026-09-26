@@ -62,6 +62,12 @@ typedef enum {
     SPV_A_PENGREN,      // 烹饪
     SPV_A_CHANGGE,      // 唱歌
     SPV_A_FADAI,        // 发呆
+    SPV_A_KANDY,        // 看电影
+    SPV_A_PAOBU,        // 跑步
+    SPV_A_XIEYOUJIAN,   // 写邮件
+    SPV_A_FUPAN,        // 复盘
+    SPV_A_WUSHUI,       // 午睡
+    SPV_A_LIAOTIAN,     // 聊天
 
     SPV_COUNT
 } spv_id_t;

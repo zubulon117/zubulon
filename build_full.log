@@ -1,0 +1,12 @@
+﻿ninja: Entering directory `build'
+[1/4] C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\traecode\Fated star pet\build\esp-idf\esptool_py" && C:\Users\13600\.espressif\python_env\idf5.5_py3.12_env\Scripts\python.exe C:/esp/esp-idf-v5.5.3/components/partition_table/check_sizes.py --offset 0x8000 partition --type app "D:/traecode/Fated star pet/build/partition_table/partition-table.bin" "D:/traecode/Fated star pet/build/FoloToy-AI-Passport.bin""
+FoloToy-AI-Passport.bin binary size 0x1b4350 bytes. Smallest app partition is 0x7f0000 bytes. 0x63bcb0 bytes (79%) free.
+
+[2/4] Performing build step for 'bootloader'
+[1/1] C:\WINDOWS\system32\cmd.exe /C "cd /D "D:\traecode\Fated star pet\build\bootloader\esp-idf\esptool_py" && C:\Users\13600\.espressif\python_env\idf5.5_py3.12_env\Scripts\python.exe C:/esp/esp-idf-v5.5.3/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x0 "D:/traecode/Fated star pet/build/bootloader/bootloader.bin""
+
+Bootloader binary size 0x5220 bytes. 0x2de0 bytes (36%) free.
+
+
+[3/4] No install step for 'bootloader'
+[4/4] Completed 'bootloader'

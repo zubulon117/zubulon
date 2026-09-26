@@ -55,19 +55,40 @@ static void build_closed(lv_obj_t *scr)
 // --------------------------------------------------------------- 开签 ---
 static void build_opened(lv_obj_t *scr, const sp_pet_t *pet)
 {
-    int32_t y = 30;
+    // 主题标题（顶部，大字体金色）。
+    lv_obj_t *theme = lv_label_create(scr);
+    lv_label_set_text(theme, sp_theme_title(s_fortune.theme_id));
+    lv_obj_set_style_text_font(theme, SP_FONT_BIG, 0);
+    lv_obj_set_style_text_color(theme, SP_C_GOLD, 0);
+    lv_obj_align(theme, LV_ALIGN_TOP_MID, 0, 8);
 
-    // 五维星级。
+    int32_t y = 34;
+
+    // 五维星级 + 短评。
     for (int d = 0; d < SP_DIM_COUNT; d++) {
         lv_obj_t *name = small_label(scr, SP_C_MIST, 10, y,
                                      LV_ALIGN_TOP_LEFT);
         lv_label_set_text(name, sp_dim_name((uint8_t)d));
         lv_obj_t *stars = sp_ui_star_row_create(scr, s_fortune.stars[d]);
         lv_obj_align(stars, LV_ALIGN_TOP_LEFT, 58, y - 2);
+
+        // 短评（星级 1-2→qid0，3→qid1，4-5→qid2）。
+        uint8_t qid = s_fortune.stars[d] <= 2 ? 0 : (s_fortune.stars[d] == 3 ? 1 : 2);
+        lv_obj_t *quote = small_label(scr, SP_C_DIM, 118, y,
+                                      LV_ALIGN_TOP_LEFT);
+        lv_label_set_text(quote, sp_dim_quote((uint8_t)d, qid));
+        lv_obj_set_style_text_font(quote, SP_FONT_SMALL, 0);
         y += 22;
     }
 
-    y += 6;
+    y += 4;
+
+    // 速配星座。
+    const sp_sign_text_t *match = sp_sign_text(s_fortune.match_sign);
+    lv_obj_t *match_lbl = small_label(scr, SP_C_MIST, 10, y,
+                                      LV_ALIGN_TOP_LEFT);
+    lv_label_set_text_fmt(match_lbl, "速配星座 %s", match->name);
+    y += 22;
 
     uint32_t color_hex = sp_color_hex(s_fortune.color_id);
     lv_obj_t *lucky = small_label(scr, SP_C_MIST, 10, y,
@@ -99,11 +120,12 @@ static void build_opened(lv_obj_t *scr, const sp_pet_t *pet)
                               sp_activity_name(s_fortune.ji[0]),
                               sp_activity_name(s_fortune.ji[1]));
     }
-    y += 28;
+    y += 26;
 
     lv_obj_t *wish = small_label(scr, SP_C_GOLD, 10, y,
                                  LV_ALIGN_TOP_LEFT);
     lv_label_set_text(wish, sp_wish_text(s_fortune.wish_id));
+    lv_obj_set_style_text_font(wish, SP_FONT_SMALL, 0);
     (void)pet;
 
     lv_obj_t *hint = small_label(scr, SP_C_DIM, 0, -12,

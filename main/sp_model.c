@@ -167,11 +167,18 @@ void sp_fortune_today(uint8_t sign, sp_date_t date, sp_fortune_t *out)
                    5 * out->stars[SP_DIM_WEALTH] + 4 * out->stars[SP_DIM_HEALTH];
     out->stars[SP_DIM_OVERALL] = clamp_star((weighted + 10) / 20);
 
+    // 方案 B：主题标题、速配星座、各维短评。
+    out->theme_id   = (uint8_t)sp_rng_range(&rng, 0, SP_THEME_COUNT - 1);
+    out->match_sign = (uint8_t)sp_rng_range(&rng, 0, SP_SIGN_COUNT - 1);
+    for (int i = 0; i < SP_DIM_COUNT; ++i) {
+        out->quote_id[i] = (uint8_t)sp_rng_range(&rng, 0, SP_DIM_QUOTE_COUNT - 1);
+    }
+
     out->color_id = (uint8_t)sp_rng_range(&rng, 0, SP_COLOR_COUNT - 1);
     out->lucky_num = (uint8_t)sp_rng_range(&rng, 1, 99);
     out->item_id = (uint8_t)sp_rng_range(&rng, 0, SP_ITEM_COUNT - 1);
 
-    // 部分 Fisher-Yates：从 18 个活动中抽出 4 个互不相同的 id。
+    // 部分 Fisher-Yates：从 24 个活动中抽出 4 个互不相同的 id。
     uint8_t pool[SP_ACTIVITY_COUNT];
     for (int i = 0; i < SP_ACTIVITY_COUNT; ++i) pool[i] = (uint8_t)i;
     for (int i = 0; i < 4; ++i) {

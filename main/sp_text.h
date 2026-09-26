@@ -28,3 +28,5 @@ uint32_t sp_color_hex(uint8_t color_id);      // 界面用 0xRRGGBB
 const char *sp_activity_name(uint8_t id);     // 宜/忌活动词条
 const char *sp_item_name(uint8_t id);         // 幸运物
 const char *sp_wish_text(uint8_t id);         // 寄语整句
+const char *sp_theme_title(uint8_t id);       // 当日主题标题
+const char *sp_dim_quote(uint8_t dim, uint8_t qid); // 五维短评

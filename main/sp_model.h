@@ -14,9 +14,11 @@
 // 词库规模（sp_text 词表与语音清单必须与之一致）。
 #define SP_SIGN_COUNT      12
 #define SP_COLOR_COUNT     12
-#define SP_ACTIVITY_COUNT  18
+#define SP_ACTIVITY_COUNT  24
 #define SP_ITEM_COUNT      12
-#define SP_WISH_COUNT      8
+#define SP_WISH_COUNT      12
+#define SP_THEME_COUNT     24
+#define SP_DIM_QUOTE_COUNT 3    // 每维星级对应的短评数量
 #define SP_DIM_COUNT       5    // 综合/爱情/事业/财运/健康
 
 #define SP_YEAR_MIN       1900
@@ -112,12 +114,15 @@ uint32_t sp_day_seed(uint8_t sign, sp_date_t date);
 
 typedef struct {
     uint8_t stars[SP_DIM_COUNT]; // [综合,爱情,事业,财运,健康]，均 1..5
+    uint8_t theme_id;            // 当日主题标题 id
+    uint8_t match_sign;          // 速配星座 id
     uint8_t color_id;            // 0..SP_COLOR_COUNT-1
     uint8_t lucky_num;           // 1..99
     uint8_t item_id;             // 0..SP_ITEM_COUNT-1
     uint8_t yi[2];               // 两个"宜"活动 id，保证互不相同
     uint8_t ji[SP_JI_MAX];       // 1..2 个"忌"活动 id；无第二项时为 SP_ID_NONE
     uint8_t wish_id;             // 0..SP_WISH_COUNT-1
+    uint8_t quote_id[SP_DIM_COUNT]; // 每维短评 id（0..SP_DIM_QUOTE_COUNT-1）
 } sp_fortune_t;
 
 #define SP_ID_NONE 0xFFu

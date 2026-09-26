@@ -64,5 +64,11 @@
   {"enum": "SPV_A_LVXING",   "text": "旅行", "file": "084_a_lvxing"},
   {"enum": "SPV_A_PENGREN",  "text": "烹饪", "file": "085_a_pengren"},
   {"enum": "SPV_A_CHANGGE",  "text": "唱歌", "file": "086_a_changge"},
-  {"enum": "SPV_A_FADAI",    "text": "发呆", "file": "087_a_fadai"}
+  {"enum": "SPV_A_FADAI",    "text": "发呆", "file": "087_a_fadai"},
+  {"enum": "SPV_A_KANDY",    "text": "看电影", "file": "088_a_kandy"},
+  {"enum": "SPV_A_PAOBU",    "text": "跑步", "file": "089_a_paobu"},
+  {"enum": "SPV_A_XIEYOUJIAN","text": "写邮件", "file": "090_a_xieyoujian"},
+  {"enum": "SPV_A_FUPAN",    "text": "复盘", "file": "091_a_fupan"},
+  {"enum": "SPV_A_WUSHUI",   "text": "午睡", "file": "092_a_wushui"},
+  {"enum": "SPV_A_LIAOTIAN", "text": "聊天", "file": "093_a_liaotian"}
 ]

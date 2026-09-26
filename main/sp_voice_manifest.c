@@ -125,8 +125,20 @@ extern const uint8_t _binary_086_a_changge_adpcm_start[];
 extern const uint8_t _binary_086_a_changge_adpcm_end[];
 extern const uint8_t _binary_087_a_fadai_adpcm_start[];
 extern const uint8_t _binary_087_a_fadai_adpcm_end[];
+extern const uint8_t _binary_088_a_kandy_adpcm_start[];
+extern const uint8_t _binary_088_a_kandy_adpcm_end[];
+extern const uint8_t _binary_089_a_paobu_adpcm_start[];
+extern const uint8_t _binary_089_a_paobu_adpcm_end[];
+extern const uint8_t _binary_090_a_xieyoujian_adpcm_start[];
+extern const uint8_t _binary_090_a_xieyoujian_adpcm_end[];
+extern const uint8_t _binary_091_a_fupan_adpcm_start[];
+extern const uint8_t _binary_091_a_fupan_adpcm_end[];
+extern const uint8_t _binary_092_a_wushui_adpcm_start[];
+extern const uint8_t _binary_092_a_wushui_adpcm_end[];
+extern const uint8_t _binary_093_a_liaotian_adpcm_start[];
+extern const uint8_t _binary_093_a_liaotian_adpcm_end[];
 
-static const uint8_t * const s_start[62] = {
+static const uint8_t * const s_start[68] = {
     _binary_000_intro_adpcm_start,
     _binary_001_overall_adpcm_start,
     _binary_002_star_adpcm_start,
@@ -189,9 +201,15 @@ static const uint8_t * const s_start[62] = {
     _binary_085_a_pengren_adpcm_start,
     _binary_086_a_changge_adpcm_start,
     _binary_087_a_fadai_adpcm_start,
+    _binary_088_a_kandy_adpcm_start,
+    _binary_089_a_paobu_adpcm_start,
+    _binary_090_a_xieyoujian_adpcm_start,
+    _binary_091_a_fupan_adpcm_start,
+    _binary_092_a_wushui_adpcm_start,
+    _binary_093_a_liaotian_adpcm_start,
 };
 
-static const uint8_t * const s_end[62] = {
+static const uint8_t * const s_end[68] = {
     _binary_000_intro_adpcm_end,
     _binary_001_overall_adpcm_end,
     _binary_002_star_adpcm_end,
@@ -254,6 +272,12 @@ static const uint8_t * const s_end[62] = {
     _binary_085_a_pengren_adpcm_end,
     _binary_086_a_changge_adpcm_end,
     _binary_087_a_fadai_adpcm_end,
+    _binary_088_a_kandy_adpcm_end,
+    _binary_089_a_paobu_adpcm_end,
+    _binary_090_a_xieyoujian_adpcm_end,
+    _binary_091_a_fupan_adpcm_end,
+    _binary_092_a_wushui_adpcm_end,
+    _binary_093_a_liaotian_adpcm_end,
 };
 
 static sp_clip_t s_clip;
