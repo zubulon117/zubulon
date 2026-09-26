@@ -9,6 +9,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* MinGW/MSVC 经 _USE_MATH_DEFINES 提供 M_PI；glibc 严格 -std=c11 不暴露。 */
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 static int s_failures;
 
 #define CHECK(cond) do { \

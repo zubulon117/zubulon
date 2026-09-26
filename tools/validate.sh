@@ -72,7 +72,7 @@ run_static_checks() {
         -o "${test_dir}/test_sp_record"
     "${test_dir}/test_sp_record"
     "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain -Itests/vectors \
-        tests/test_sp_adpcm.c main/sp_adpcm.c \
+        tests/test_sp_adpcm.c main/sp_adpcm.c -lm \
         -o "${test_dir}/test_sp_adpcm"
     "${test_dir}/test_sp_adpcm"
     "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain \
