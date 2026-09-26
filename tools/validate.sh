@@ -61,6 +61,36 @@ run_static_checks() {
             -o "${test_dir}/test_demo_${demo}_runtime"
         "${test_dir}/test_demo_${demo}_runtime"
     done
+
+    # ------------------------------------------------- 命定星宠主机测试 ---
+    "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain \
+        tests/test_sp_model.c main/sp_model.c \
+        -o "${test_dir}/test_sp_model"
+    "${test_dir}/test_sp_model"
+    "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain \
+        tests/test_sp_record.c main/sp_record.c main/sp_model.c \
+        -o "${test_dir}/test_sp_record"
+    "${test_dir}/test_sp_record"
+    "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain -Itests/vectors \
+        tests/test_sp_adpcm.c main/sp_adpcm.c \
+        -o "${test_dir}/test_sp_adpcm"
+    "${test_dir}/test_sp_adpcm"
+    "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain \
+        tests/test_sp_sprites.c \
+        -o "${test_dir}/test_sp_sprites"
+    "${test_dir}/test_sp_sprites"
+    PYTHONDONTWRITEBYTECODE=1 python3 tests/test_sp_sprites.py
+    PYTHONDONTWRITEBYTECODE=1 python3 tests/test_voice_inventory.py
+    # 字体覆盖门禁需要 node + lv_font_conv（可用 LV_FONT_CONV 指定路径）；
+    # 环境缺失时显式跳过而不是静默通过。
+    if [[ -n "${LV_FONT_CONV:-}" && -x "${LV_FONT_CONV}" ]]; then
+        PYTHONDONTWRITEBYTECODE=1 python3 tests/test_sp_font_coverage.py
+    elif command -v lv_font_conv >/dev/null 2>&1; then
+        PYTHONDONTWRITEBYTECODE=1 python3 tests/test_sp_font_coverage.py
+    else
+        echo "SKIP: test_sp_font_coverage.py (lv_font_conv unavailable; set LV_FONT_CONV)"
+    fi
+
     PYTHONDONTWRITEBYTECODE=1 python3 tests/test_deep_sleep_contract.py
     PYTHONDONTWRITEBYTECODE=1 python3 tests/test_check_repo.py
     PYTHONDONTWRITEBYTECODE=1 python3 tests/test_verify_firmware.py

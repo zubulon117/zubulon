@@ -5,9 +5,14 @@ managed_components/
 .vscode/
 .idea/
 
+# TRAE spec/plan artifacts (local workflow only)
+.trae/
+
 # Generated repository-local links; canonical skill sources live in skills/.
 /.agents/skills/passport-develop
 /.agents/skills/passport-setup
 /.agents/skills/passport-build
 /.agents/skills/passport-device-test
 /.agents/skills/passport-debug
+tools/starpet/.fontdump/
+
