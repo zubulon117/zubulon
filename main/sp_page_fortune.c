@@ -126,6 +126,9 @@ static void build_opened(lv_obj_t *scr, const sp_pet_t *pet)
                                  LV_ALIGN_TOP_LEFT);
     lv_label_set_text(wish, sp_wish_text(s_fortune.wish_id));
     lv_obj_set_style_text_font(wish, SP_FONT_SMALL, 0);
+    // 寄语较长，固定宽度并循环滚动避免越出屏幕右缘。
+    lv_obj_set_width(wish, 220);
+    lv_label_set_long_mode(wish, LV_LABEL_LONG_SCROLL_CIRCULAR);
     (void)pet;
 
     lv_obj_t *hint = small_label(scr, SP_C_DIM, 0, -12,
