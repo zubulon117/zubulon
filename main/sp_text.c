@@ -81,6 +81,7 @@ static const char *const s_themes[SP_THEME_COUNT] = {
 
 // 五维短评（每维 3 句，qid 0..2 对应星级 1-2/3/4-5）。
 // 页面短评列从 x=118 起仅约 122px（16px 字体约 7 字），每条必须 <= 7 字。
+// 短评只描述状态、不给活动建议，避免与同屏随机抽取的宜忌活动互相矛盾。
 static const char *const s_quotes[SP_DIM_COUNT][SP_DIM_QUOTE_COUNT] = {
     { // 综合
         "低调蓄力为宜",
@@ -88,9 +89,9 @@ static const char *const s_quotes[SP_DIM_COUNT][SP_DIM_QUOTE_COUNT] = {
         "好运全开之日",
     },
     { // 爱情
-        "多给彼此空间",
+        "桃花略显平静",
         "平淡也有温度",
-        "主动会有惊喜",
+        "桃花运势正旺",
     },
     { // 事业
         "冷静应对波折",
@@ -98,14 +99,14 @@ static const char *const s_quotes[SP_DIM_COUNT][SP_DIM_QUOTE_COUNT] = {
         "新想法受欢迎",
     },
     { // 财运
-        "捂紧钱包为妙",
-        "正常开销无忧",
+        "偏财暂未敲门",
+        "收支平衡安稳",
         "或有意外收获",
     },
     { // 健康
-        "别熬夜早休息",
-        "适度运动放松",
-        "精力饱满宜动",
+        "身体电量偏低",
+        "记得多喝热水",
+        "元气满满在线",
     },
 };
 
