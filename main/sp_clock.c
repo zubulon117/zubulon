@@ -8,6 +8,8 @@
 #include "esp_sntp.h"
 #include "esp_netif_sntp.h"
 
+#include "sp_store.h"
+
 static const char *TAG = "sp_clock";
 #define RTC_MIN_YEAR SP_CLOCK_MIN_YEAR
 
@@ -35,7 +37,25 @@ void sp_clock_init(void)
     apply_tz();
     struct tm tm;
     s_valid = read_local(&tm) && tm.tm_year + 1900 >= RTC_MIN_YEAR;
-    ESP_LOGI(TAG, "clock %s", s_valid ? "valid" : "NOT calibrated");
+    if (!s_valid) {
+        // RTC 冷启动归零：用 NVS 里最近落盘的时间近似恢复（精度取决于
+        // 上次落盘与断电时长），使按日玩法立即可用、手动校时默认上次日期。
+        int64_t saved;
+        if (sp_store_load_time(&saved)) {
+            struct timeval tv = { .tv_sec = (time_t)saved, .tv_usec = 0 };
+            if (settimeofday(&tv, NULL) == 0) {
+                s_valid = true;
+                ESP_LOGI(TAG, "clock restored from NVS (approximate)");
+            }
+        }
+    }
+    if (s_valid && read_local(&tm)) {
+        ESP_LOGI(TAG, "clock valid: %04d-%02d-%02d %02d:%02d",
+                 tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
+                 tm.tm_hour, tm.tm_min);
+    } else if (!s_valid) {
+        ESP_LOGI(TAG, "clock NOT calibrated");
+    }
 }
 
 bool sp_clock_valid(void)
@@ -107,6 +127,7 @@ static bool set_clock(sp_date_t date, uint16_t minute)
     }
     apply_tz();
     s_valid = true;
+    sp_store_save_time((int64_t)epoch);
     return true;
 }
 
@@ -140,6 +161,7 @@ bool sp_clock_sntp_wait(uint32_t timeout_ms)
     }
     apply_tz();
     s_valid = true;
+    sp_store_save_time((int64_t)time(NULL));
     struct tm tm;
     if (read_local(&tm)) {
         ESP_LOGI(TAG, "sntp synced: %04d-%02d-%02d %02d:%02d",

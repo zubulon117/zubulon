@@ -1,6 +1,7 @@
 #include "sp_store.h"
 
 #include <string.h>
+#include <time.h>
 
 #include "esp_log.h"
 #include "nvs.h"
@@ -19,6 +20,12 @@ static const char KEY_B[] = "rec_b";
 static const char KEY_VOL[] = "vol";
 static const char KEY_SSID[] = "ssid";
 static const char KEY_PASS[] = "pass";
+static const char KEY_TS[] = "ts";
+
+// 2024-01-01 00:00:00 UTC，早于该值视为未校准（RTC 冷启动为 1970）。
+#define MIN_VALID_EPOCH 1704067200LL
+// 保存任务空转该时长后落盘一次当前时间（供断电后近似恢复）。
+#define TIME_SAVE_PERIOD_MS (5 * 60 * 1000)
 
 static QueueHandle_t s_save_queue;
 static TaskHandle_t s_save_task;
@@ -30,7 +37,10 @@ static void save_task(void *arg)
     (void)arg;
     sp_pet_t pet;
     for (;;) {
-        if (xQueueReceive(s_save_queue, &pet, portMAX_DELAY) != pdTRUE) {
+        // 无存档写入时空转超时，顺带周期落盘时间戳（复用本任务，不占 UI）。
+        if (xQueueReceive(s_save_queue, &pet,
+                          pdMS_TO_TICKS(TIME_SAVE_PERIOD_MS)) != pdTRUE) {
+            sp_store_save_time((int64_t)time(NULL));
             continue;
         }
         uint32_t seq = ++s_sequence;
@@ -263,4 +273,37 @@ void sp_store_wifi_clear(void)
         nvs_commit(h);
         nvs_close(h);
     }
+}
+
+void sp_store_save_time(int64_t epoch)
+{
+    if (epoch < MIN_VALID_EPOCH) {
+        return;
+    }
+    nvs_handle_t h;
+    if (nvs_open(NS_APP, NVS_READWRITE, &h) == ESP_OK) {
+        if (nvs_set_u64(h, KEY_TS, (uint64_t)epoch) == ESP_OK) {
+            nvs_commit(h);
+        }
+        nvs_close(h);
+    }
+}
+
+bool sp_store_load_time(int64_t *out)
+{
+    if (!out) {
+        return false;
+    }
+    nvs_handle_t h;
+    uint64_t v = 0;
+    bool ok = false;
+    if (nvs_open(NS_APP, NVS_READONLY, &h) == ESP_OK) {
+        ok = nvs_get_u64(h, KEY_TS, &v) == ESP_OK;
+        nvs_close(h);
+    }
+    if (ok && (int64_t)v >= MIN_VALID_EPOCH) {
+        *out = (int64_t)v;
+        return true;
+    }
+    return false;
 }

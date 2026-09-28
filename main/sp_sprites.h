@@ -12,8 +12,8 @@ extern "C" {
 #define SP_SPRITE_FRAMES 3
 #define SP_SIGN_COUNT 12
 
-// I4 调色板（ARGB8888，0 号全透明），UI 启动时灌入 canvas。
-extern const uint32_t sp_sprite_palette_argb[16];
+// 每星座独立 I4 调色板（ARGB8888 x16，0 号全透明，按亮度升序）。
+const uint32_t *sp_sprite_palette(uint8_t sign);
 
 // 取某星座某帧的 I4 像素（低 nibble 在前）；越界回退白羊第 0 帧。
 const uint8_t *sp_sprite_frame(uint8_t sign, uint8_t frame);

@@ -33,19 +33,17 @@ void sp_ui_style_screen(lv_obj_t *scr);
 uint32_t sp_ui_glyph_selfcheck(void);
 
 // ---------------------------------------------------------------- 顶栏 ---
+// 布局：中间完整年月日（最上层居中），右侧电量。星座·阶段名由主页放在宠物图下方。
 typedef struct {
-    lv_obj_t *left;    // 星座·阶段
     lv_obj_t *center;  // 日期
     lv_obj_t *right;   // 电量
 } sp_ui_topbar_t;
 
-// sign 0..11；stage 0..2；date/电池可为空/-1（降级显示）。
+// date 可为空（显示 "--/--/--"）；电量 -1 时显示 "--%"。
 void sp_ui_topbar_create(sp_ui_topbar_t *tb, lv_obj_t *parent,
-                         uint8_t sign, uint8_t stage,
                          const sp_date_t *date, int battery_soc);
-void sp_ui_topbar_refresh(const sp_ui_topbar_t *tb, uint8_t sign,
-                          uint8_t stage, const sp_date_t *date,
-                          int battery_soc);
+void sp_ui_topbar_refresh(const sp_ui_topbar_t *tb,
+                          const sp_date_t *date, int battery_soc);
 
 // ---------------------------------------------------------------- 星级 ---
 // 生成 5 颗星的一行（画布绘制，不依赖字体里的星号字形）。

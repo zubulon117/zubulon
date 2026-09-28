@@ -78,32 +78,26 @@ static lv_obj_t *make_bar_label(lv_obj_t *parent, lv_align_t align,
 }
 
 void sp_ui_topbar_create(sp_ui_topbar_t *tb, lv_obj_t *parent,
-                         uint8_t sign, uint8_t stage,
                          const sp_date_t *date, int battery_soc)
 {
     memset(tb, 0, sizeof(*tb));
-    tb->left = make_bar_label(parent, LV_ALIGN_TOP_LEFT, 6, 4, SP_C_GOLD);
-    tb->center = make_bar_label(parent, LV_ALIGN_TOP_MID, 0, 4, SP_C_MIST);
+    // 完整年月日置于最上层居中；右侧电量。星座·阶段名由主页另放。
+    tb->center = make_bar_label(parent, LV_ALIGN_TOP_MID, 0, 4, SP_C_GOLD);
     tb->right = make_bar_label(parent, LV_ALIGN_TOP_RIGHT, -6, 4, SP_C_MIST);
-    sp_ui_topbar_refresh(tb, sign, stage, date, battery_soc);
+    sp_ui_topbar_refresh(tb, date, battery_soc);
 }
 
-void sp_ui_topbar_refresh(const sp_ui_topbar_t *tb, uint8_t sign,
-                          uint8_t stage, const sp_date_t *date,
-                          int battery_soc)
+void sp_ui_topbar_refresh(const sp_ui_topbar_t *tb,
+                          const sp_date_t *date, int battery_soc)
 {
-    if (!tb || !tb->left) {
+    if (!tb || !tb->center) {
         return;
     }
-    const sp_sign_text_t *st = sp_sign_text(sign);
-    const char *sign_name = st ? st->name : "?";
-    const char *stage_name = sp_stage_name(stage);
-    lv_label_set_text_fmt(tb->left, "%s·%s", sign_name, stage_name);
     if (date) {
         lv_label_set_text_fmt(tb->center, "%d/%02d/%02d",
                               (int)date->year, date->month, date->day);
     } else {
-        lv_label_set_text(tb->center, "未校时");
+        lv_label_set_text(tb->center, "--/--/--");
     }
     if (battery_soc >= 0) {
         lv_label_set_text_fmt(tb->right, "%d%%", battery_soc);
@@ -505,6 +499,7 @@ void sp_ui_pet_canvas_show(lv_obj_t *cv, uint8_t sign, uint8_t frame)
         return;
     }
     const uint8_t *src = sp_sprite_frame(sign, frame);
+    const uint32_t *pal = sp_sprite_palette(sign);
     uint8_t *px = (uint8_t *)lv_canvas_get_buf(cv);
     if (!px) {
         return;
@@ -513,7 +508,7 @@ void sp_ui_pet_canvas_show(lv_obj_t *cv, uint8_t sign, uint8_t frame)
         for (int x = 0; x < SP_PET_CANVAS_W; x++) {
             uint8_t byte = src[y * SP_PET_CANVAS_W / 2 + x / 2];
             uint8_t nibble = (x & 1) ? (byte >> 4) : (byte & 0x0F);
-            uint32_t argb = sp_sprite_palette_argb[nibble];
+            uint32_t argb = pal[nibble];
             int o = (y * SP_PET_CANVAS_W + x) * SP_PET_ARGB_BPP;
             px[o + 0] = (uint8_t)(argb & 0xFF);         // B
             px[o + 1] = (uint8_t)((argb >> 8) & 0xFF);  // G

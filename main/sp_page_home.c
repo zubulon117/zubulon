@@ -19,6 +19,7 @@
 typedef struct {
     sp_ui_topbar_t bar;
     lv_obj_t *pet_cv;
+    lv_obj_t *name_lab;   // 星座·阶段（宠物图下方）
     lv_obj_t *mood_lab;
     lv_obj_t *bond_lab;
     lv_obj_t *coins_lab;
@@ -40,8 +41,10 @@ static void refresh_home(void)
     }
     sp_date_t today;
     sp_date_t *tp = sp_state_today(&today) ? &today : NULL;
-    sp_ui_topbar_refresh(&s_home.bar, pet->sign, pet->stage, tp,
-                         sp_state_battery());
+    sp_ui_topbar_refresh(&s_home.bar, tp, sp_state_battery());
+    const sp_sign_text_t *st = sp_sign_text(pet->sign);
+    lv_label_set_text_fmt(s_home.name_lab, "%s·%s",
+                          st ? st->name : "?", sp_stage_name(pet->stage));
     lv_label_set_text_fmt(s_home.mood_lab, "心情 %d", pet->mood);
     lv_label_set_text_fmt(s_home.bond_lab, "亲密 %d", pet->bond);
     lv_label_set_text_fmt(s_home.coins_lab, "星币 %d", pet->coins);
@@ -70,9 +73,7 @@ static void home_enter(sp_page_t *page)
     sp_date_t today;
     sp_date_t *tp = sp_state_today(&today) ? &today : NULL;
     sp_state_catchup();
-    sp_ui_topbar_create(&s_home.bar, page->scr,
-                        pet ? pet->sign : 0, pet ? pet->stage : 0,
-                        tp, sp_state_battery());
+    sp_ui_topbar_create(&s_home.bar, page->scr, tp, sp_state_battery());
 
     s_home.pet_cv = sp_ui_pet_canvas_create(page->scr, 3);
     lv_obj_align(s_home.pet_cv, LV_ALIGN_CENTER, 0, -34);
@@ -80,11 +81,19 @@ static void home_enter(sp_page_t *page)
         sp_ui_pet_canvas_show(s_home.pet_cv, pet->sign, 0);
     }
 
+    // 星座·阶段名：宠物图（96px，中心 y=-34，底边 y=+14）下方居中。
+    s_home.name_lab = lv_label_create(page->scr);
+    lv_obj_set_style_text_font(s_home.name_lab, SP_FONT_SMALL, 0);
+    lv_obj_set_style_text_color(s_home.name_lab, SP_C_GOLD, 0);
+    lv_obj_align(s_home.name_lab, LV_ALIGN_CENTER, 0, 28);
+
     lv_obj_t *row = lv_obj_create(page->scr);
     lv_obj_remove_style_all(row);
     lv_obj_set_size(row, 228, 24);
     lv_obj_align(row, LV_ALIGN_CENTER, 0, 84);
     lv_obj_set_flex_flow(row, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(row, LV_FLEX_ALIGN_CENTER,
+                          LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
     lv_obj_set_style_pad_column(row, 14, 0);
     lv_obj_set_style_pad_all(row, 0, 0);
     lv_obj_clear_flag(row, LV_OBJ_FLAG_SCROLLABLE);

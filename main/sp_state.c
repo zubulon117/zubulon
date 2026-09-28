@@ -12,6 +12,7 @@
 #include "sp_audio.h"
 #include "sp_clock.h"
 #include "sp_store.h"
+#include "sp_wifi.h"
 
 static const char *TAG = "sp_state";
 
@@ -49,6 +50,15 @@ void sp_state_init(void)
         s_batt_soc = soc;
     }
     s_last_batt_ms = (uint32_t)(esp_timer_get_time() / 1000);
+
+    // 冷启动 RTC 已归零（NVS 恢复只是近似值）：有已存凭据就后台联网校时，
+    // 完成后由页面 enter 时的 sp_state_catchup() 自然吸收跨天变化。
+    char ssid[SP_WIFI_SSID_MAX + 1];
+    char pass[SP_WIFI_PASS_MAX + 1];
+    if (sp_store_wifi_load(ssid, sizeof(ssid), pass, sizeof(pass)) &&
+        sp_wifi_run(ssid, pass, NULL, NULL)) {
+        ESP_LOGI(TAG, "boot time sync started");
+    }
 }
 
 bool sp_state_has_pet(void)
