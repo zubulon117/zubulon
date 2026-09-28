@@ -30,5 +30,9 @@ void sp_state_set_volume(uint8_t level);
 // 电池电量百分比，-1=不可用；内部缓存，2s 内不重复读。
 int sp_state_battery(void);
 
+// 星缘图鉴：当前位图；相遇一位并立即落盘，返回是否为初次相遇。
+uint16_t sp_state_dex(void);
+bool sp_state_dex_visit(uint8_t sign);
+
 // 抹除全部应用数据并重启（回到引导）。
 void sp_state_factory_reset(void);

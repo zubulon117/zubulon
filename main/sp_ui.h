@@ -122,3 +122,6 @@ void sp_ui_typebox_key(sp_ui_typebox_t *t, const sp_input_t *input);
 // 24x24 I4 画布（sp_sprites 帧直接灌入），scale=1..3 整数放大。
 lv_obj_t *sp_ui_pet_canvas_create(lv_obj_t *parent, uint8_t scale);
 void sp_ui_pet_canvas_show(lv_obj_t *cv, uint8_t sign, uint8_t frame);
+// silhouette=true 时以单色暗蓝剪影渲染（星缘图鉴未相遇状态）。
+void sp_ui_pet_canvas_show_ex(lv_obj_t *cv, uint8_t sign, uint8_t frame,
+                              bool silhouette);

@@ -24,6 +24,7 @@ idf_component_register(
          "sp_page_home.c"
          "sp_page_fortune.c"
          "sp_page_care.c"
+         "sp_page_dex.c"
          "sp_page_settings.c"
          "assets/fonts/sp_font_16.c"
          "assets/fonts/sp_font_20.c"

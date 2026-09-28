@@ -182,3 +182,15 @@ sp_act_result_t sp_pet_checkin(sp_pet_t *pet, sp_date_t today);
 // 跨天结算：把 pet 推进到 current（含每日衰减、次数重置、掉电追赶封顶）。
 // 返回实际跨过的天数（0 表示无需结算）。
 uint32_t sp_pet_advance_day(sp_pet_t *pet, sp_date_t current);
+
+// ------------------------------------------------------------- 图鉴 ----
+// 星缘图鉴：按日星友来访 + 已相遇位图（bit n = 相遇过星座 n）。
+#define SP_DEX_ALL 0x0FFFu
+
+// 该日来访的星友星座：以 (own_sign, date) 做确定性种子，保证异于自己。
+uint8_t sp_dex_visitor(uint8_t own_sign, sp_date_t date);
+bool sp_dex_has(uint16_t mask, uint8_t sign);
+// 相遇置位；返回新位图（越界 sign 原样返回）。
+uint16_t sp_dex_visit(uint16_t mask, uint8_t sign);
+// 十二星座全部相遇（星图大师达成）。
+bool sp_dex_complete(uint16_t mask);

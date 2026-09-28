@@ -30,3 +30,4 @@ const char *sp_item_name(uint8_t id);         // 幸运物
 const char *sp_wish_text(uint8_t id);         // 寄语整句
 const char *sp_theme_title(uint8_t id);       // 当日主题标题
 const char *sp_dim_quote(uint8_t dim, uint8_t qid); // 五维短评
+const char *sp_sign_personality(uint8_t sign); // 星缘图鉴性格一句话

@@ -21,6 +21,7 @@ static const char KEY_VOL[] = "vol";
 static const char KEY_SSID[] = "ssid";
 static const char KEY_PASS[] = "pass";
 static const char KEY_TS[] = "ts";
+static const char KEY_DEX[] = "dex";
 
 // 2024-01-01 00:00:00 UTC，早于该值视为未校准（RTC 冷启动为 1970）。
 #define MIN_VALID_EPOCH 1704067200LL
@@ -190,6 +191,27 @@ void sp_store_save_volume(uint8_t level)
     nvs_handle_t h;
     if (nvs_open(NS_APP, NVS_READWRITE, &h) == ESP_OK) {
         nvs_set_u8(h, KEY_VOL, level);
+        nvs_commit(h);
+        nvs_close(h);
+    }
+}
+
+uint16_t sp_store_load_dex(void)
+{
+    nvs_handle_t h;
+    uint16_t mask = 0;
+    if (nvs_open(NS_APP, NVS_READONLY, &h) == ESP_OK) {
+        nvs_get_u16(h, KEY_DEX, &mask);
+        nvs_close(h);
+    }
+    return mask;
+}
+
+void sp_store_save_dex(uint16_t mask)
+{
+    nvs_handle_t h;
+    if (nvs_open(NS_APP, NVS_READWRITE, &h) == ESP_OK) {
+        nvs_set_u16(h, KEY_DEX, mask);
         nvs_commit(h);
         nvs_close(h);
     }

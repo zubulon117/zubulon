@@ -35,6 +35,10 @@ void sp_store_erase_all(void);
 uint8_t sp_store_load_volume(void);
 void sp_store_save_volume(uint8_t level);
 
+// 星缘图鉴位图（bit=已相遇星座）。独立键，不进宠物存档布局。
+uint16_t sp_store_load_dex(void);
+void sp_store_save_dex(uint16_t mask);
+
 // Wi-Fi 凭据。密码永不出现在日志中。
 bool sp_store_wifi_save(const char *ssid, const char *pass);
 bool sp_store_wifi_load(char *ssid, size_t ssid_cap,

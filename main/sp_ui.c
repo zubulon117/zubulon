@@ -45,6 +45,7 @@ uint32_t sp_ui_glyph_selfcheck(void)
         "音量恢复出厂确认取消返回长按双击上下确认",
         "白羊金双巨蟹狮女天秤蝎射摩羯瓶鱼生肖",
         "加载中请稍候成功失败冷却已满次数",
+        "星缘图鉴尚未相遇后解锁性格速配集齐大师来访",
         "，。！？：（）~",
     };
     uint32_t missing = 0;
@@ -176,6 +177,9 @@ lv_obj_t *sp_ui_star_row_create(lv_obj_t *parent, uint8_t filled)
 static void menu_render(sp_ui_menu_t *m)
 {
     lv_obj_clean(m->holder);
+    // holder 尺寸为百分比，需先强制结算布局，否则 content_height 为 0，
+    // visible 被钳到 1（表现为菜单一次只显示一项）。
+    lv_obj_update_layout(m->holder);
     int32_t avail_h = lv_obj_get_content_height(m->holder);
     int32_t row_h = 28;
     int8_t visible = (int8_t)(avail_h / row_h);
@@ -493,13 +497,9 @@ lv_obj_t *sp_ui_pet_canvas_create(lv_obj_t *parent, uint8_t scale)
     return cv;
 }
 
-void sp_ui_pet_canvas_show(lv_obj_t *cv, uint8_t sign, uint8_t frame)
+static void pet_canvas_paint(lv_obj_t *cv, const uint8_t *src,
+                             const uint32_t *pal)
 {
-    if (!cv) {
-        return;
-    }
-    const uint8_t *src = sp_sprite_frame(sign, frame);
-    const uint32_t *pal = sp_sprite_palette(sign);
     uint8_t *px = (uint8_t *)lv_canvas_get_buf(cv);
     if (!px) {
         return;
@@ -517,4 +517,33 @@ void sp_ui_pet_canvas_show(lv_obj_t *cv, uint8_t sign, uint8_t frame)
         }
     }
     lv_obj_invalidate(cv);
+}
+
+void sp_ui_pet_canvas_show(lv_obj_t *cv, uint8_t sign, uint8_t frame)
+{
+    if (!cv) {
+        return;
+    }
+    pet_canvas_paint(cv, sp_sprite_frame(sign, frame),
+                     sp_sprite_palette(sign));
+}
+
+void sp_ui_pet_canvas_show_ex(lv_obj_t *cv, uint8_t sign, uint8_t frame,
+                              bool silhouette)
+{
+    if (!cv) {
+        return;
+    }
+    if (!silhouette) {
+        sp_ui_pet_canvas_show(cv, sign, frame);
+        return;
+    }
+    // 剪影调色板：非透明项统一映射为暗蓝，栈上 16 项无额外常驻内存。
+    uint32_t mono[16];
+    const uint32_t dim = 0xFF2A3358u;
+    mono[0] = 0;
+    for (int i = 1; i < 16; i++) {
+        mono[i] = dim;
+    }
+    pet_canvas_paint(cv, sp_sprite_frame(sign, frame), mono);
 }

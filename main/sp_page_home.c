@@ -12,6 +12,7 @@
 #include "sp_ui.h"
 
 #include "sp_page_care.h"
+#include "sp_page_dex.h"
 #include "sp_page_fortune.h"
 #include "sp_page_settings.h"
 
@@ -154,6 +155,7 @@ static sp_ui_menu_t s_menu;
 static const char *MENU_ITEMS[] = {
     "今日运势",
     "互动照料",
+    "星缘图鉴",
     "设置",
 };
 
@@ -165,6 +167,8 @@ static void menu_pick(uint8_t index, void *arg)
         sp_app_goto(sp_page_fortune());
     } else if (index == 1) {
         sp_app_goto(sp_page_care());
+    } else if (index == 2) {
+        sp_app_goto(sp_page_dex());
     } else {
         sp_app_goto(sp_page_settings());
     }
@@ -193,7 +197,7 @@ static void menu_enter(sp_page_t *page)
     lv_obj_align(holder, LV_ALIGN_CENTER, 0, 20);
     lv_obj_clear_flag(holder, LV_OBJ_FLAG_SCROLLABLE);
 
-    sp_ui_menu_init(&s_menu, holder, MENU_ITEMS, 3, menu_pick, menu_back,
+    sp_ui_menu_init(&s_menu, holder, MENU_ITEMS, 4, menu_pick, menu_back,
                     NULL);
 
     lv_obj_t *hint = lv_label_create(page->scr);

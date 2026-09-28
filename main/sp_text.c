@@ -166,3 +166,24 @@ const char *sp_dim_quote(uint8_t dim, uint8_t qid)
     if (qid >= SP_DIM_QUOTE_COUNT) qid = 0;
     return s_quotes[dim][qid];
 }
+
+// 星缘图鉴：各星座性格一句话（≤10 字，只显示不朗读）。
+static const char *const s_personalities[SP_SIGN_COUNT] = {
+    "一点就燃的行动派",   // 白羊
+    "慢热踏实的收藏家",   // 金牛
+    "话题不落的风信使",   // 双子
+    "温柔护家的月亮心",   // 巨蟹
+    "自带聚光的小太阳",   // 狮子
+    "细节控的完美工匠",   // 处女
+    "优雅平衡的调酒师",   // 天秤
+    "深藏不露的夜行者",   // 天蝎
+    "自由如风的远行者",   // 射手
+    "默默攀峰的实干家",   // 摩羯
+    "脑洞清奇的星际客",   // 水瓶
+    "心软浪漫的造梦师",   // 双鱼
+};
+
+const char *sp_sign_personality(uint8_t sign)
+{
+    return sign < SP_SIGN_COUNT ? s_personalities[sign] : s_personalities[0];
+}

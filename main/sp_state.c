@@ -19,6 +19,7 @@ static const char *TAG = "sp_state";
 static sp_pet_t s_pet;
 static bool s_has_pet;
 static uint8_t s_volume = 1;
+static uint16_t s_dex;
 static uint32_t s_last_batt_ms;
 static int s_batt_soc = -1;
 
@@ -28,6 +29,7 @@ void sp_state_init(void)
     sp_clock_init();
 
     s_volume = sp_store_load_volume();
+    s_dex = sp_store_load_dex();
     sp_audio_start(s_volume);
 
     if (sp_store_load_pet(&s_pet)) {
@@ -138,6 +140,21 @@ int sp_state_battery(void)
         s_last_batt_ms = now;
     }
     return s_batt_soc;
+}
+
+uint16_t sp_state_dex(void)
+{
+    return s_dex;
+}
+
+bool sp_state_dex_visit(uint8_t sign)
+{
+    if (sp_dex_has(s_dex, sign)) {
+        return false;
+    }
+    s_dex = sp_dex_visit(s_dex, sign);
+    sp_store_save_dex(s_dex);
+    return true;
 }
 
 void sp_state_factory_reset(void)

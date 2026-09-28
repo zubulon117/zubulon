@@ -146,6 +146,37 @@ uint32_t sp_day_seed(uint8_t sign, sp_date_t date)
     return h != 0 ? h : 0x9E3779B9u;
 }
 
+// ------------------------------------------------------------- 图鉴 ----
+uint8_t sp_dex_visitor(uint8_t own_sign, sp_date_t date)
+{
+    if (own_sign >= SP_SIGN_COUNT) {
+        own_sign = 0;
+    }
+    // 除自己外的 11 个星座中确定性取一：0..10 映射跳过 own_sign。
+    sp_rng_t rng;
+    sp_rng_seed(&rng, sp_day_seed(own_sign, date));
+    uint32_t idx = sp_rng_range(&rng, 0, SP_SIGN_COUNT - 2);
+    return (uint8_t)(idx < own_sign ? idx : idx + 1);
+}
+
+bool sp_dex_has(uint16_t mask, uint8_t sign)
+{
+    return sign < SP_SIGN_COUNT && ((mask >> sign) & 1u) != 0u;
+}
+
+uint16_t sp_dex_visit(uint16_t mask, uint8_t sign)
+{
+    if (sign < SP_SIGN_COUNT) {
+        mask |= (uint16_t)(1u << sign);
+    }
+    return mask;
+}
+
+bool sp_dex_complete(uint16_t mask)
+{
+    return (mask & SP_DEX_ALL) == SP_DEX_ALL;
+}
+
 // ------------------------------------------------------------- 运势 ----
 static uint8_t clamp_star(int v)
 {
